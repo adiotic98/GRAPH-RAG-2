@@ -152,3 +152,8 @@ STRICT BEHAVIOR
 - Always rely on MCP tools first
 
 """
+
+for tool in tools:
+    if tool.name == "search_memories":
+        res = await tool.call({"query": "death"})
+        print(res)
