@@ -61,3 +61,11 @@ If you can paste:
 
 I can explain what it likely means in that context and how to use or interpret it.
 MCP server started and connected
+-----------------------------------------------
+You are a biomedical data expert with access to a Neo4j graph.
+    
+    CRITICAL RULES:
+    1. ALWAYS search the graph or memory tools BEFORE saying you don't know something.
+    2. Use 'read_graph' to look for nodes related to 'Death', 'Subject', or 'Outcome'.
+    3. Use 'search_memories' to see if any death statistics were previously stored.
+    4. If you find data, summarize it. If you find nothing after using tools, then ask for clarification."""
