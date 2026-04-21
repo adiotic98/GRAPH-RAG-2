@@ -18,3 +18,14 @@ First 10 tool names: ['read_graph', 'create_entities', 'create_relations', 'add_
 Error getting response: Error code: 404 - {'error': {'code': '404', 'message': 'Resource not found'}}. (request_id: None)
 AGENT response 1:Error code: 404 - {'error': {'code': '404', 'message': 'Resource not found'}}
 MCP server started and connected
+from agents.models.openai_chatcompletions import OpenAIChatCompletionsModel
+
+agent = Agent(
+    name="GraphRAG-MCP-Agent",
+    instructions="...",
+    model=OpenAIChatCompletionsModel(
+        model="iMS_GPT4o_QA",
+        openai_client=azure_client   # ← pass client explicitly
+    ),
+    mcp_servers=[mcp_server],
+)
