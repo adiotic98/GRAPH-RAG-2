@@ -10,3 +10,11 @@ MCP server started and connected
 [non-fatal] Tracing: request failed: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)
 [non-fatal] Tracing: request failed: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1000)
 [non-fatal] Tracing: max retries reached, giving up on this batch.
+ Azure OpenAI client configured for Agents SDK
+MCP server session active
+Tools count: 9
+ Model accessible: I’m here and working. How can I help you today?
+First 10 tool names: ['read_graph', 'create_entities', 'create_relations', 'add_observations', 'delete_entities', 'delete_observations', 'delete_relations', 'search_memories', 'find_memories_by_name']
+Error getting response: Error code: 404 - {'error': {'code': '404', 'message': 'Resource not found'}}. (request_id: None)
+AGENT response 1:Error code: 404 - {'error': {'code': '404', 'message': 'Resource not found'}}
+MCP server started and connected
