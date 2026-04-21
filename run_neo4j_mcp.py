@@ -1,14 +1,17 @@
  
+ 
 import asyncio
 from openai import AsyncAzureOpenAI
 import os
 
 from agents.mcp.server import MCPServerStdio
-from agents import set_default_openai_client
+from agents import set_default_openai_client,set_tracing_disabled
 
 from agents import Agent, Runner
 import ssl,httpx
 import urllib3
+from agents.models.openai_chatcompletions import OpenAIChatCompletionsModel
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 ssl._create_default_https_context=ssl._create_unverified_context
 
@@ -21,11 +24,12 @@ ssl_context = ssl.create_default_context()
 ssl_context.check_hostname = False
 ssl_context.verify_mode = ssl.CERT_NONE
 
-
+set_tracing_disabled(True)
 azure_client = AsyncAzureOpenAI(
     api_key=AZURE_OPENAI_API_KEY,
     azure_endpoint=AZURE_OPENAI_ENDPOINT,
     api_version=AZURE_OPENAI_API_VERSION,
+    max_retries=5,
     http_client=httpx.AsyncClient(verify=False,proxy=None)
 )
 set_default_openai_client(azure_client)
@@ -70,24 +74,25 @@ async def main():
                         name="GraphRAG-MCP-Agent",
             instructions=f"""Biomedical expert with GraphRAG + Neo4j Memory.
             
-Use MCP tools:
-- create_entities/add_observations: Store query facts/entities
-- search_memories/find_memories_by_name: Recall prior context
-- read_graph: Graph queries (ADA trough, cohorts)
+
             
 
             
 Combine with your GraphRAG knowledge for comprehensive answers.""",
-            model="iMS_GPT4o_QA",  
+            model=OpenAIChatCompletionsModel(
+            model="iMS_GPT4o_QA",
+            openai_client=azure_client   # ← pass client explicitly
+    ),
             mcp_servers=[mcp_server],  # Enables all 9 tools
         )
         try:
-            result = await Runner.run(agent, "Subjects who first became ADA at week 16: store key stats (mean trough week 36).")
+            result = await Runner.run(agent, "How many deaths were reported?")
+            print(result.final_output)
         except Exception as e:
             print(f"AGENT response 1:{e}")
         # print(result.final_output)
-        # result2=await Runner.run(agent,"Recall ADA week 16 subjects' trough stats from memory.")
-        # print(result2.final_output)
+        result2=await Runner.run(agent,"total death is mentioned in database I want to know ")
+        print(result2.final_output)
             # return result.final_output
 
 # Test multi-turn memory
