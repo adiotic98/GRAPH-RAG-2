@@ -198,3 +198,13 @@ Tools count: 3
  Model accessible: Hello! I’m here and working. How can I help you to
 First 10 tool names: ['get_neo4j_schema', 'read_neo4j_cypher', 'write_neo4j_cypher']
 MCP server started and connected.
+--------------------------------------------------------------------------------------------------------
+print("--- Step 1: Getting Schema ---")
+try:
+    schema_check = await Runner.run(
+        agent,
+        "Use get_neo4j_schema tool to fetch the full graph schema. List all node labels, relationship types, and their properties."
+    )
+    print("SCHEMA:", schema_check.final_output)
+except Exception as e:
+    print(f"Schema error: {e}")
