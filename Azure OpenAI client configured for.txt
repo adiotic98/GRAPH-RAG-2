@@ -156,3 +156,14 @@ for tool in tools:
     if tool.name == "search_memories":
         res = await tool.call({"query": "death"})
         print(res)
+------------------------------------------------------------------------
+ Azure OpenAI client configured for Agents SDK
+MCP server session active
+Tools count: 9
+ Model accessible: It’s working. How can I help you today?
+First 10 tool names: ['read_graph', 'create_entities', 'create_relations', 'add_observations', 'delete_entities', 'delete_observations', 'delete_relations', 'search_memories', 'find_memories_by_name']
+reading existing graph details
+I searched the Neo4j memory graph using `search_memories` with the query `"deaths reported"`; it returned an empty result (no entities or relations).
+
+No data about any reported deaths is currently stored in the graph, so I cannot say how many deaths were reported. If you provide more context (e.g., study name, disease, time period, or location), I can store that as a new entity or help you structure it.
+MCP server started and connected
