@@ -175,4 +175,19 @@ The Core Issue
 ToolWhat it actually doesmcp-neo4j-memoryManages its OWN memory graph (create/search entities it stored)What you needQuery YOUR existing populated Neo4j database with Cypher.
 The 9 tools (create_entities, search_memories, etc.) are all for the memory server's own internal graph — they cannot run arbitrary Cypher on your database.
 
+--------------------------------------------------------------------
+The mcp-neo4j-memory server is designed specifically as a persistent memory layer for LLMs.
 
+Self-Managed Schema: It creates a very specific graph structure (nodes for Entity, Relation, and Observation) meant to store conversation history.
+
+Not a Data Browser: It does not "scan" your existing nodes or properties (like your reported deaths) unless they were created by the agent using the create_entities tool during a previous session.
+
+Restricted Tools: The tools provided (add_observations, search_memories) only look at the specific "Memory" nodes it manages, effectively ignoring any other pre-existing data in your Neo4j instance.
+------------------------------------------------------------------------------------
+The mcp-neo4j-memory server is designed specifically as a persistent memory layer for LLMs.
+
+Self-Managed Schema: It creates a very specific graph structure (nodes for Entity, Relation, and Observation) meant to store conversation history.
+
+Not a Data Browser: It does not "scan" your existing nodes or properties (like your reported deaths) unless they were created by the agent using the create_entities tool during a previous session.
+
+Restricted Tools: The tools provided (add_observations, search_memories) only look at the specific "Memory" nodes it manages, effectively ignoring any other pre-existing data in your Neo4j instance.
