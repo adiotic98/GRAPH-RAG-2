@@ -191,3 +191,10 @@ Self-Managed Schema: It creates a very specific graph structure (nodes for Entit
 Not a Data Browser: It does not "scan" your existing nodes or properties (like your reported deaths) unless they were created by the agent using the create_entities tool during a previous session.
 
 Restricted Tools: The tools provided (add_observations, search_memories) only look at the specific "Memory" nodes it manages, effectively ignoring any other pre-existing data in your Neo4j instance.
+--------------------------------------------------------------------------------------------------
+Azure OpenAI client configured for Agents SDK
+MCP server session active
+Tools count: 3
+ Model accessible: Hello! I’m here and working. How can I help you to
+First 10 tool names: ['get_neo4j_schema', 'read_neo4j_cypher', 'write_neo4j_cypher']
+MCP server started and connected.
