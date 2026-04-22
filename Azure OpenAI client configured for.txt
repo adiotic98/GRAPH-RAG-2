@@ -221,3 +221,33 @@ STRICT RULES:
     ),
     mcp_servers=[mcp_server],
 )
+
+
+# Query 1 — schema first
+print("--- Schema ---")
+schema = await Runner.run(
+    agent,
+    "Use get_neo4j_schema to show the full schema of this database."
+)
+print(schema.final_output)
+
+# Query 2 — your actual question
+print("--- Deaths Query ---")
+result = await Runner.run(
+    agent,
+    """First call get_neo4j_schema to understand the graph structure.
+    Then use read_neo4j_cypher to answer: How many deaths were reported?
+    Show the Cypher query you used and the exact result returned."""
+)
+print(result.final_output)
+
+# Query 3 — ADA question
+print("--- ADA Query ---")
+ada_result = await Runner.run(
+    agent,
+    """First call get_neo4j_schema.
+    Then use read_neo4j_cypher to find: subjects who first became ADA positive 
+    at week 16, and their mean serum trough at week 36.
+    Show the Cypher query and exact results."""
+)
+print(ada_result.final_output)
