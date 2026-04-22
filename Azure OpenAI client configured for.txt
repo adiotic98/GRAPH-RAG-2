@@ -166,4 +166,13 @@ reading existing graph details
 I searched the Neo4j memory graph using `search_memories` with the query `"deaths reported"`; it returned an empty result (no entities or relations).
 
 No data about any reported deaths is currently stored in the graph, so I cannot say how many deaths were reported. If you provide more context (e.g., study name, disease, time period, or location), I can store that as a new entity or help you structure it.
-MCP server started and connected
+MCP server started and connected.
+
+
+The mcp-neo4j-memory server is the problem. It's a memory/knowledge graph tool — it manages its own separate Neo4j graph for storing AI conversation memories. It is not a general-purpose Neo4j query tool that connects to your existing populated database.
+
+The Core Issue
+ToolWhat it actually doesmcp-neo4j-memoryManages its OWN memory graph (create/search entities it stored)What you needQuery YOUR existing populated Neo4j database with Cypher.
+The 9 tools (create_entities, search_memories, etc.) are all for the memory server's own internal graph — they cannot run arbitrary Cypher on your database.
+
+
