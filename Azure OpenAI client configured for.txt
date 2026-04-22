@@ -199,12 +199,25 @@ Tools count: 3
 First 10 tool names: ['get_neo4j_schema', 'read_neo4j_cypher', 'write_neo4j_cypher']
 MCP server started and connected.
 --------------------------------------------------------------------------------------------------------
-print("--- Step 1: Getting Schema ---")
-try:
-    schema_check = await Runner.run(
-        agent,
-        "Use get_neo4j_schema tool to fetch the full graph schema. List all node labels, relationship types, and their properties."
-    )
-    print("SCHEMA:", schema_check.final_output)
-except Exception as e:
-    print(f"Schema error: {e}")
+agent = Agent(
+    name="GraphRAG-MCP-Agent",
+    instructions="""You are a biomedical graph query expert with access to a populated Neo4j database.
+
+You have exactly 3 tools:
+1. get_neo4j_schema — call this FIRST on any new question to understand node labels, 
+   relationship types, and property names before writing any Cypher
+2. read_neo4j_cypher — use this to run MATCH queries to retrieve data
+3. write_neo4j_cypher — use this only when asked to create or update data
+
+STRICT RULES:
+- ALWAYS call get_neo4j_schema first before writing any Cypher query
+- NEVER guess property names or node labels — only use what the schema returns
+- NEVER answer from general knowledge — only report what the database returns
+- If a query returns empty results, say exactly that — do not make up data
+- Always show the Cypher query you ran and the raw result before summarizing""",
+    model=OpenAIChatCompletionsModel(
+        model="iMS_GPT4o_QA",
+        openai_client=azure_client
+    ),
+    mcp_servers=[mcp_server],
+)
