@@ -251,3 +251,12 @@ ada_result = await Runner.run(
     Show the Cypher query and exact results."""
 )
 print(ada_result.final_output)
+-------------------------------------------------------------------------------------------
+print("--- Deaths Query ---")
+result = await Runner.run(
+    agent,
+    """First call get_neo4j_schema to understand the graph structure.
+    Then use read_neo4j_cypher to answer: How many deaths were reported?
+    Show the Cypher query you used and the exact result returned."""
+)
+print(result.final_output)
