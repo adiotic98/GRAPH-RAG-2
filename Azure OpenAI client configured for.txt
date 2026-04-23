@@ -260,3 +260,10 @@ result = await Runner.run(
     Show the Cypher query you used and the exact result returned."""
 )
 print(result.final_output)
+
+while True:
+    question = input("Ask your graph: ")
+    if question == "exit":
+        break
+    result = await Runner.run(agent, question)
+    print(result.final_output)
