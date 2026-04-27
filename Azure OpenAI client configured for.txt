@@ -378,4 +378,112 @@ In the data returned:
 
 Based strictly on the graph content returned by this query, the database does not explicitly encode “maintenance of response at Week 52 among Week 16 Icotrokinra responders” as a distinct outcome. I can report the Week 52 IGA and PASI response rates (above), but I cannot confirm that these are restricted to Week 16 responders, nor can I derive that restriction from the stored properties.
 
+-----------------------------------------------------------------------------
+tool1: get_neo4j_schema
+What it does:
+Runs these Cypher queries internally on your DB:
+
+CALL apoc.meta.schema()
+-- OR --
+CALL db.schema.visualization()
+-- OR --
+MATCH (n) RETURN distinct labels(n), keys(n) LIMIT 100
+
+Returns:
+- All node labels  (e.g. Participant, Timepoint, LabResult)
+- All relationship types  (e.g. HAS_LAB, AT_TIMEPOINT)
+- All property keys per node
+
+It does NOT return:
+- Actual data values
+- Row counts
+- Relationships between specific nodes
+
+
+
+-------------------------------------
+tool2: read_neo4j_cypher
+
+What it does:
+Takes whatever Cypher string the agent writes
+and runs it directly on your DB as a READ transaction
+
+session.run(cypher_string_from_agent)
+
+Returns:
+- Raw JSON records exactly as Neo4j returns them
+- No interpretation, no summarization
+
+Limitations:
+- Agent must write 100% correct Cypher
+- Wrong property name = empty result
+- Wrong relationship name = empty result
+- No fuzzy matching, no semantic search
+-__________________________________________________________
+Tool 3: write_neo4j_cypher
+
+What it does:
+Same as read_neo4j_cypher but runs as a WRITE transaction
+
+Allows: CREATE, MERGE, SET, DELETE
+Used for: storing new nodes/relationships
+
+-------------------------------------------------------------------
+You: "How many deaths were reported?"
+         ↓
+Agent calls get_neo4j_schema
+         ↓
+Gets back: [Participant, Outcome, Timepoint, LabResult...]
+         ↓
+Agent GUESSES which node/property means "death"
+e.g. Outcome.status = 'death'  ← may be wrong
+         ↓
+Agent calls read_neo4j_cypher with:
+MATCH (p:Participant)-[:HAS_OUTCOME]->(o:Outcome)
+WHERE o.status = 'death'
+RETURN count(p)
+         ↓
+If property name is wrong → returns []
+         ↓
+Agent says "no data found"
+
+--------------------------------------------------------------------------
+You: "How many deaths were reported?"
+         ↓
+Agent calls get_neo4j_schema
+         ↓
+Gets back: [Participant, Outcome, Timepoint, LabResult...]
+         ↓
+Agent GUESSES which node/property means "death"
+e.g. Outcome.status = 'death'  ← may be wrong
+         ↓
+Agent calls read_neo4j_cypher with:
+MATCH (p:Participant)-[:HAS_OUTCOME]->(o:Outcome)
+WHERE o.status = 'death'
+RETURN count(p)
+         ↓
+If property name is wrong → returns []
+         ↓
+Agent says "no data found"
+--------------------------------------------------------------------------------------------
+why it's fails
+GraphRAG understands:          MCP Cypher only does:
+"deaths reported"        →     Exact property match
+"ADA week 16 responders" →     Exact relationship traversal  
+"maintenance of response" →    Exact node lookup
+
+If the agent guesses wrong     If the Cypher is wrong
+property name → empty result   → empty result → wrong answer
+
+The Fundamental Limitation
+The agent has to perfectly translate your natural language into Cypher using only the schema — no semantic understanding of your data values, no vector search, no fuzzy matching.
+
+This is why LangGraph + GraphRAG beats it — GraphRAG uses embeddings to find relevant data even when property names don't exactly match your question.
+
+
+
+
+
+
+
     
