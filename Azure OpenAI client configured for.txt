@@ -367,4 +367,15 @@ Steps:
         print("\nAnswer:", result.final_output)
     except Exception as e:
         print(f"Error: {e}")
+-----------------------------------------------------------------------------------------------------------------
+In the data returned:
+
+- Week 52 outcomes that look like maintenance-type efficacy measures include:
+  - IGA at week 52: 83.7% (n = 227)
+  - PASI at week 52: 87.0% (n = 184)
+- However, there is no property indicating that these percentages are “among Week 16 responders”, nor is there any field explicitly tying Week 52 outcomes to a responder subset defined at Week 16.
+- The “roles and activities scorea” results at Week 8 and Week 16 are present, but there is no Week 52 entry for that measurement and no link that defines “Week 16 responders” or filters Week 52 data to that subset.
+
+Based strictly on the graph content returned by this query, the database does not explicitly encode “maintenance of response at Week 52 among Week 16 Icotrokinra responders” as a distinct outcome. I can report the Week 52 IGA and PASI response rates (above), but I cannot confirm that these are restricted to Week 16 responders, nor can I derive that restriction from the stored properties.
+
     
