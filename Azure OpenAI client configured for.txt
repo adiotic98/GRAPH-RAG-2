@@ -318,4 +318,17 @@ STRICT RULES:
   to verify data exists before adding WHERE conditions
 - Never answer from general knowledge
 - Always show the Cypher query you ran and the raw JSON result""",
+
+# Direct verification — bypasses agent completely
+verify = await Runner.run(
+    agent,
+    """Use read_neo4j_cypher to run these 3 simple queries one by one:
+
+    1. MATCH (n) RETURN distinct labels(n) as NodeTypes, count(n) as Count
+    2. MATCH ()-[r]->() RETURN distinct type(r) as RelType, count(r) as Count  
+    3. MATCH (n) RETURN keys(n) as Properties LIMIT 3
+
+    Show the raw results of all 3 queries."""
+)
+print(verify.final_output)
     
