@@ -267,3 +267,32 @@ while True:
         break
     result = await Runner.run(agent, question)
     print(result.final_output)
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+Azure OpenAI client configured for Agents SDK
+MCP server session active
+Tools count: 3
+ Model accessible: Hi — I’m here and working. What would you like hel
+First 10 tool names: ['get_neo4j_schema', 'read_neo4j_cypher', 'write_neo4j_cypher']
+--- Deaths Query ---
+Cypher query executed:
+
+```cypher
+MATCH (p:Participant)-[:HAS_ANTIBODY_RESULT]->(ar:AntibodyResult)-[:AT_TIMEPOINT]->(t:Timepoint {week: 16})
+WHERE ar.positive = true
+MATCH (p)-[:HAS_LAB]->(l:LabTestResult)-[:AT_TIMEPOINT]->(t)
+WHERE l.testName CONTAINS 'plasma' AND l.testName CONTAINS 'through'
+RETURN p.participantId AS participantId, l.testName AS testName, l.unit AS unit
+```
+
+Raw result:
+
+```json
+[]
+```
+
+Summary:
+
+The database returned no records. There are no stored lab results matching “plasma through concentrations” at week 16 for patients who became ADA-positive, so the requested information is not present in this graph.
+Ask your graph: exit
+MCP server started and connected
