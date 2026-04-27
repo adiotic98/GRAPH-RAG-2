@@ -331,4 +331,40 @@ verify = await Runner.run(
     Show the raw results of all 3 queries."""
 )
 print(verify.final_output)
+
+----------------------------------------------------------------------------------
+# Fetch schema once at startup
+schema_result = await Runner.run(
+    agent,
+    "Call get_neo4j_schema tool and return the full raw output."
+)
+schema_text = schema_result.final_output
+print("Schema loaded:\n", schema_text)
+
+# Interactive loop with schema always injected
+while True:
+    question = input("\nAsk your graph: ")
+    if question.lower() == "exit":
+        break
+    
+    prompt = f"""The exact Neo4j database schema is:
+
+{schema_text}
+
+Use ONLY the labels and properties from this schema.
+Now answer this question using read_neo4j_cypher:
+{question}
+
+Steps:
+1. Identify relevant nodes and relationships from the schema
+2. Write a Cypher query using exact names from schema
+3. Run it with read_neo4j_cypher
+4. If empty result, broaden the query and try again
+5. Report the Cypher query used and the exact result"""
+
+    try:
+        result = await Runner.run(agent, prompt)
+        print("\nAnswer:", result.final_output)
+    except Exception as e:
+        print(f"Error: {e}")
     
