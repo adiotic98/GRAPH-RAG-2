@@ -296,3 +296,6 @@ Summary:
 The database returned no records. There are no stored lab results matching “plasma through concentrations” at week 16 for patients who became ADA-positive, so the requested information is not present in this graph.
 Ask your graph: exit
 MCP server started and connected
+
+-----------------------------------------------------------------------------
+
